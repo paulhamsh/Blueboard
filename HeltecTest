@@ -44,8 +44,6 @@ void setup() {
     NimBLEScanResults results = pScan->start(4);
 
     NimBLEUUID serviceUuid("03b80e5a-ede8-4b33-a751-6ce34ec4c700"); // service for iRig Blueboard MIDI mode 
-  
-//    NimBLEAddress deviceAddress("d7:07:63:82:f2:bb");
     
     Serial.println("**********************************************************");
     for(i = 0; i < results.getCount() && !connected; i++) {
@@ -56,37 +54,6 @@ void setup() {
       Serial.print(device.getName().c_str());
       Serial.print(" : ");
 
-      /*
-      Serial.print("Address ");
-      Serial.println(device.getAddress().toString().c_str());     
-      Serial.print("Manufacturer ");
-      Serial.println(device.getManufacturerData().c_str());    
-      Serial.print("Service Count ");
-      Serial.println(device.getServiceDataCount());
-      Serial.print("Service Data (for given UUID)");
-      Serial.println(device.getServiceData(serviceUuid).c_str());
-      Serial.print("Service Data UUID (0)");
-      Serial.println(device.getServiceUUID(0).toString().c_str());
-      Serial.println("-------------");
-      */ 
-      
-      // look for the service we need
-      /*
-      if (device.isAdvertisingService(serviceUuid)) {
-        Serial.print("Trying to connect....");
-        pClient = NimBLEDevice::createClient();
-        if(pClient->connect(&device)) {
-          connected = true;
-          Serial.println("connected");
-        }
-        else { 
-          Serial.println("failed");
-        }
-      }
-      else {
-        Serial.println("not advertising the service UUID");
-      }
-      */
 
       if (strcmp(device.getName().c_str(),"iRig BlueBoard") == 0) {
         Serial.print("Found BlueBoard by name - trying to connect....");
@@ -102,8 +69,6 @@ void setup() {
       else {
         Serial.println("not advertising the service UUID");
       }
-
-      
     }
 
     // Get the services
