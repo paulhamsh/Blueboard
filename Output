@@ -1,3 +1,5 @@
+First version does this - trying to find the service UUID
+
 >>>>>>>>>>>>>
 Name iRig BlueBoard
 Address d7:07:63:82:f2:bb
@@ -10,7 +12,7 @@ Not advertising
 
 
 
-And now - when connecting by name and not service UUID....
+And now - when connecting by *name* and not service UUID....
 
 Started
 **********************************************************
