@@ -1,0 +1,109 @@
+#include <M5Core2.h> 
+#include "NimBLEDevice.h"
+
+
+// BLE 
+NimBLEAdvertisedDevice device;
+NimBLEClient *pClient;
+NimBLERemoteService *pService;
+NimBLERemoteCharacteristic *pSender;
+NimBLERemoteCharacteristic *pReceiver;
+
+
+void notifyCB(NimBLERemoteCharacteristic* pRemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify){
+  int i;
+
+  for (i = 0; i < length; i++) 
+    Serial.print(pData[i]);
+}
+
+
+bool connected;
+
+void setup() {
+  // put your setup code here, to run once:
+  M5.begin();
+  M5.Lcd.fillScreen(TFT_BLACK);
+  M5.Lcd.setTextSize(2);
+  M5.Lcd.println("iRig Blueboard Test");
+  
+  Serial.println("Started");
+
+
+  connected = false;
+  int i;
+  
+  NimBLEDevice::init("");
+
+  while (!connected) {
+    NimBLEDevice::init("");
+  
+    NimBLEScan *pScan = NimBLEDevice::getScan();
+    NimBLEScanResults results = pScan->start(4);
+
+    NimBLEUUID serviceUuid("03b80e5a-ede8-4b33-a751-6ce34ec4c700"); // service for iRig Blueboard MIDI mode 
+  
+//    NimBLEAddress deviceAddress("d7:07:63:82:f2:bb");
+    
+    Serial.println("**********************************************************");
+    for(i = 0; i < results.getCount() && !connected; i++) {
+      device = results.getDevice(i);
+
+      // Print info
+      Serial.println(">>>>>>>>>>>>>");
+      Serial.print("Name ");
+      Serial.println(device.getName().c_str());
+      Serial.print("Address ");
+      Serial.println(device.getAddress().toString().c_str());     
+      Serial.print("Manufacturer ");
+      Serial.println(device.getManufacturerData().c_str());    
+      Serial.print("Service Count ");
+      Serial.println(device.getServiceDataCount());
+      Serial.print("Service Data (for given UUID)");
+      Serial.println(device.getServiceData(serviceUuid).c_str());
+      Serial.print("Service Data UUID (0)");
+      Serial.println(device.getServiceUUID(0).toString().c_str());
+      Serial.println("-------------");
+
+      // look for the service we need
+      if (device.isAdvertisingService(serviceUuid)) {
+        Serial.println("Trying to connect");
+        pClient = NimBLEDevice::createClient();
+        if(pClient->connect(&device)) {
+          connected = true;
+          Serial.println("BLE Connected");
+        }
+        else { 
+          Serial.println("Connect failed");
+        }
+      }
+      else {
+        Serial.println("Not advertising");
+      }
+    }
+
+    // Get the services
+  
+    if (connected) {
+      pService = pClient->getService(serviceUuid);
+                
+      if (pService != nullptr) {
+        pReceiver = pService->getCharacteristic("7772e5db-3868-4112-a1a9-f2669d106bf3");
+        if (pReceiver && pReceiver->canNotify()) {
+          if (!pReceiver->subscribe(true, notifyCB, true)) {
+            connected = false;
+            pClient->disconnect();
+          }
+        }
+      }
+    }
+      
+    if (!connected) Serial.println ("Not connected - trying again");
+  }
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  M5.update();
+}
