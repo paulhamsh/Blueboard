@@ -7,3 +7,33 @@ Service Data (for given UUID)
 Service Data UUID (0)
 -------------
 Not advertising
+
+
+
+And now - when connecting by name and not service UUID....
+
+Started
+**********************************************************
+Name iRig BlueBoard : Found BlueBoard by name - trying to connect....connected
+80 80 90 3E 64 
+80 80 80 3E 0 
+80 80 90 40 64 
+80 80 80 40 0 
+80 80 90 3C 64 
+80 80 80 3C 0 
+80 80 90 41 64 
+80 80 80 41 0 
+80 80 90 3E 64 
+80 80 80 3E 0 
+80 80 90 40 64 
+80 80 80 40 0 
+80 80 90 40 64 
+80 80 80 40 0 
+80 80 90 3C 64 
+80 80 80 3C 0 
+80 80 90 3C 64 
+80 80 80 3C 0 
+80 80 90 41 64 
+80 80 80 41 0 
+80 80 90 41 64 
+80 80 80 41 0 
