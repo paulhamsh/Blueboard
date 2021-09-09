@@ -34,8 +34,9 @@ void notifyCB_bb(NimBLERemoteCharacteristic* pRemoteCharacteristic, uint8_t* pDa
   }
   Serial.println();
 
-  M5.Lcd.fillRect(0, 60, 320, 20, TFT_BLACK);
-  M5.Lcd.setCursor(0, 60);
+  M5.Lcd.fillRect(0, 80, 260, 20, TFT_DARKCYAN);
+  M5.Lcd.setCursor(0, 80);
+  M5.Lcd.setTextColor(TFT_WHITE, TFT_DARKCYAN);
   for (i = 0; i < length; i++) {
     M5.Lcd.print(pData[i], HEX);
     M5.Lcd.print(" ");
@@ -78,8 +79,9 @@ void notifyCB_sp(NimBLERemoteCharacteristic* pRemoteCharacteristic, uint8_t* pDa
   }
   Serial.println();
 
-  M5.Lcd.fillRect(0, 100, 320, 140, TFT_BLACK);
-  M5.Lcd.setCursor(0, 100);
+  M5.Lcd.fillRect(0, 120, 320, 120, TFT_NAVY);
+  M5.Lcd.setCursor(0, 120);
+  M5.Lcd.setTextColor(TFT_WHITE, TFT_NAVY);
   for (i = 0; i < length; i++) {
     M5.Lcd.print(pData[i], HEX);
     M5.Lcd.print(" ");
@@ -94,17 +96,28 @@ void setup() {
   M5.begin();
   M5.Lcd.fillScreen(TFT_BLACK);
   M5.Lcd.setTextSize(2);
-  M5.Lcd.fillRect(0,0,300,20, TFT_BLUE);
-  M5.Lcd.fillRect(300,0,20,20, TFT_DARKGREEN);
-  M5.Lcd.setTextColor(TFT_WHITE, TFT_BLUE);
-  M5.Lcd.println("Spark BlueBoard");
-  M5.Lcd.setTextColor(TFT_WHITE, TFT_WHITE);
-  M5.Lcd.setCursor(0,20);
-  M5.Lcd.println("CONNECTED?");
-  M5.Lcd.setCursor(0, 40);
-  M5.Lcd.print("BLUEBOARD");
-  M5.Lcd.setCursor(0, 80);
-  M5.Lcd.println("SPARK");
+  M5.Lcd.fillRect(0, 0, 260, 20, TFT_OLIVE);
+  M5.Lcd.setTextColor(TFT_WHITE, TFT_OLIVE);
+  M5.Lcd.println("-- SPARK BLUEBOARD --");
+  
+  M5.Lcd.fillRect(260, 0, 80, 100, TFT_DARKGREEN);
+
+  M5.Lcd.fillRect(0, 20, 260, 40, TFT_PURPLE);
+  M5.Lcd.setTextColor(TFT_WHITE, TFT_PURPLE);
+  M5.Lcd.setCursor(0, 20);
+  M5.Lcd.println("WHAT IS CONNECTED...");
+ 
+
+  M5.Lcd.fillRect(0, 60, 260, 40, TFT_DARKCYAN);
+  M5.Lcd.setTextColor(TFT_WHITE, TFT_DARKCYAN);  
+  M5.Lcd.setCursor(0, 60);
+  M5.Lcd.print("BLUEBOARD DATA");
+
+
+  M5.Lcd.fillRect(0, 100, 320, 120, TFT_NAVY);
+  M5.Lcd.setTextColor(TFT_WHITE, TFT_NAVY);  
+  M5.Lcd.setCursor(0, 100);
+  M5.Lcd.println("SPARK DATA");
   
   Serial.println("Started");
 
@@ -142,8 +155,9 @@ void setup() {
         if(pClient_bb->connect(&device)) {
           connected_bb = true;
           Serial.println("connected");
-          M5.Lcd.setCursor(130,20);
-          M5.Lcd.println("BLUEBD");
+          M5.Lcd.setCursor(0,40);
+          M5.Lcd.setTextColor(TFT_WHITE, TFT_PURPLE);
+          M5.Lcd.println("BLUEBOARD");
         }
       }
       
@@ -154,7 +168,8 @@ void setup() {
         if(pClient_sp->connect(&device)) {
           connected_sp = true;
           Serial.println("connected");
-          M5.Lcd.setCursor(230,20);
+          M5.Lcd.setCursor(120,40);
+          M5.Lcd.setTextColor(TFT_WHITE, TFT_PURPLE);
           M5.Lcd.println("SPARK");
         }
       }
@@ -204,11 +219,12 @@ void loop() {
   if (triggered) {
     triggered = false;
 
-    M5.Lcd.fillRect(300,0,20,20, TFT_DARKGREEN);
+    M5.Lcd.fillRect(260,0,60,100, TFT_DARKGREEN);
     M5.Lcd.setTextColor(TFT_WHITE, TFT_DARKGREEN);
-    M5.Lcd.setCursor(300,0);
+    M5.Lcd.setCursor(270, 20);
+    M5.Lcd.setTextSize(8);
     M5.Lcd.print(curr_preset);
-    M5.Lcd.setTextColor(TFT_WHITE, TFT_WHITE);
+    M5.Lcd.setTextSize(2);    
 
     if (connected_sp) {
       preset_cmd[preset_cmd_size-2] = curr_preset;
